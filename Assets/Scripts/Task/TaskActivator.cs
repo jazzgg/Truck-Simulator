@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class TaskActivator : MonoBehaviour
 {
-    private TaskList _taskList => GetComponent<TaskList>();
+    private TaskList _taskList;
 
     private void Awake()
     {
+        _taskList = GetComponent<TaskList>();
         _taskList.OnSetTask += DisableOtherTasks;
+
+        //Start all the tasks
 
         for (int i = 0; i < _taskList.GetTasks().Length; i++)
         {
             _taskList.GetTasks()[i].StartTask();
         }
     }
+    
     public void ActivateCurrentTask()
     {
         if (_taskList.GetCurrentTask().isDone == false)
@@ -37,7 +41,7 @@ public class TaskActivator : MonoBehaviour
             {
                 _taskList.GetTasks()[i].enabled = false;
                 if (_taskList.GetPreviousTask() != null)
-                    _taskList.GetPreviousTask().GetTrailer().DetachTrailer();
+                    _taskList.GetPreviousTask().GetTrailer().DetachTrailer(); 
                 _taskList.GetTasks()[i].GetAttachPoint().enabled = false;
                 if (_taskList.GetTasks()[i].isDone == false)
                     _taskList.GetTasks()[i].ActivateFirstStage();

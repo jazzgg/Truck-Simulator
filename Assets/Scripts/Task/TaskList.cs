@@ -11,7 +11,7 @@ public class TaskList : MonoBehaviour
     private TrailerTask _currentTask;
     private TrailerTask _previousTask;
 
-    private TrailerTask[] _tasks => GetComponentsInChildren<TrailerTask>();
+    private TrailerTask[] _tasks;
 
     public void SetCurrentTask(TrailerTask task)
     {
@@ -32,6 +32,9 @@ public class TaskList : MonoBehaviour
     {
         return _tasks;
     }
-
+    private void Start()
+    {
+        _tasks = GetComponentsInChildren<TrailerTask>();
+    }
 }
  

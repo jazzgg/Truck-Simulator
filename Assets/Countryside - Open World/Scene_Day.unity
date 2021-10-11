@@ -779,7 +779,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 
 --- !u!222 &341866328
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1015,7 +1015,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 
 --- !u!222 &471592779
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1757,7 +1757,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 
 --- !u!222 &849339908
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2003,7 +2003,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _firstStagetText: "\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0433\u0440\u0443\u0437\u043E\u0432\u0438\u043A"
   _secondStageText: "\u043E\u0442\u0432\u0435\u0437\u0438\u0442\u0435 \u0433\u0440\u0443\u0437\u043E\u0432\u0438\u043A"
-  _taskCompletedText: "\u0412\u044B\u043F\u043E\u043B\u0435\u043D\u043E"
+  _taskCompletedText: "\u0412\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"
   _minDistance: 3
   _trailer: {fileID: 1887528301}
   _finishPoint: {fileID: 1656839534}

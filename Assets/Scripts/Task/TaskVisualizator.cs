@@ -4,13 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 public class TaskVisualizator : MonoBehaviour
 {
-    private TaskList _taskList => GetComponent<TaskList>();
+    private TaskList _taskList;
     private Image[] _tasksImages;
 
-    private Image _currentTaskImg => _taskList.GetCurrentTask().GetComponent<Image>();
+    private Image _currentTaskImg;
 
     private void Start()
     {
+        _taskList = GetComponent<TaskList>(); 
+        _currentTaskImg = _taskList.GetCurrentTask().GetComponent<Image>();
+
         _tasksImages = new Image[_taskList.GetTasks().Length];
 
         for (int i = 0; i < _tasksImages.Length; i++)

@@ -9,18 +9,31 @@ public class TrailerTask : MonoBehaviour
     public bool isDone { get; protected set; }
 
     [SerializeField]
-    private string _firstStagetText, _secondStageText, _taskCompletedText;
+    private string _firstStageText, _secondStageText, _taskCompletedText;
     [SerializeField]
     private float _minDistance;
     [SerializeField]
     private RCC_TruckTrailer _trailer;
     [SerializeField]
     private Transform _finishPoint;
-    private Text _taskText => GetComponentInChildren<Text>();
-    private Toggle _isTaskDoneToggle => GetComponentInChildren<Toggle>();
-    private BoxCollider _attachPointCollider => _trailer.GetComponentInChildren<RCC_TrailerAttachPoint>().GetComponent<BoxCollider>();
 
-    private Button _taskButton => GetComponent<Button>();
+    private Text _taskText;
+    private Toggle _isTaskDoneToggle;
+    private BoxCollider _attachPointCollider;
+
+    private Button _taskButton;
+
+    private float _distance;
+
+    private void Start()
+    {
+       _taskText = GetComponentInChildren<Text>();
+       _isTaskDoneToggle = GetComponentInChildren<Toggle>();
+       _attachPointCollider = _trailer.GetComponentInChildren<RCC_TrailerAttachPoint>().GetComponent<BoxCollider>();
+       _taskButton = GetComponent<Button>();
+
+       _distance = Vector3.Distance(_trailer.transform.position, _finishPoint.transform.position);
+    }
     public RCC_TruckTrailer GetTrailer()
     {
         return _trailer;
@@ -43,11 +56,11 @@ public class TrailerTask : MonoBehaviour
         _trailer.OnTrailerAttached += ActivateSecondStage;
 
         _isTaskDoneToggle.isOn = isDone;
-        _taskText.text = _firstStagetText;
+        _taskText.text = _firstStageText;
     }
     public void ActivateFirstStage()
     {
-        _taskText.text = _firstStagetText;
+        _taskText.text = _firstStageText;
     }
     private void ActivateSecondStage()
     {
