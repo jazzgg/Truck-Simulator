@@ -10,6 +10,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// Truck trailer has additional wheelcolliders. This script handles center of mass of the trailer, wheelcolliders, ligths, etc...
@@ -18,6 +19,8 @@ using System.Collections.Generic;
 [RequireComponent (typeof(Rigidbody))]
 [RequireComponent(typeof(ConfigurableJoint))]
 public class RCC_TruckTrailer : MonoBehaviour {
+	public event Action OnTrailerAttached;
+	public event Action OnTrailerDetached;
 
 	private RCC_CarControllerV3 carController;
 	private Rigidbody rigid;
@@ -204,7 +207,7 @@ public class RCC_TruckTrailer : MonoBehaviour {
 	public void DetachTrailer(){
 
 		// Resetting attachedTrailer of car controller.
-		carController.attachedTrailer = null;
+		//carController.attachedTrailer = null;
 		carController = null;
 		lights = null;
 		timer = 1f;
@@ -216,6 +219,8 @@ public class RCC_TruckTrailer : MonoBehaviour {
 
 		if (RCC_SceneManager.Instance.activePlayerCamera && RCC_SceneManager.Instance.activePlayerCamera.TPSAutoFocus)
 			StartCoroutine(RCC_SceneManager.Instance.activePlayerCamera.AutoFocus ());
+
+		OnTrailerDetached?.Invoke();
 
 	}
 
@@ -259,6 +264,7 @@ public class RCC_TruckTrailer : MonoBehaviour {
 		if (RCC_SceneManager.Instance.activePlayerCamera && RCC_SceneManager.Instance.activePlayerCamera.TPSAutoFocus)
 			StartCoroutine(RCC_SceneManager.Instance.activePlayerCamera.AutoFocus (transform, carController.transform));
 
+		OnTrailerAttached?.Invoke();
 	}
 
     private void Reset() {
