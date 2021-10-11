@@ -1,60 +1,69 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class TaskActivator : MonoBehaviour
 {
+    public event Action OnTaskCompleted;
+
+    [SerializeField]
     private TaskList _taskList;
 
-    private void Awake()
+    private void Start()
     {
-        _taskList = GetComponent<TaskList>();
-        _taskList.OnSetTask += DisableOtherTasks;
-
-        //Start all the tasks
-
-        for (int i = 0; i < _taskList.GetTasks().Length; i++)
+        for (int i = 0; i < _taskList.GetTasks().Count; i++)
         {
-            _taskList.GetTasks()[i].StartTask();
+            _taskList.GetTasks()[i].GetTrailer().OnTrailerAttached += ChangeTaskStage;
+            _taskList.GetTasks()[i].GetTrailer().OnTrailerDetached += ChangeTaskStage;
+        }
+
+    }
+    public void DisableOtherTask(TrailerTask task)
+    {
+        for (int i = 0; i < _taskList.GetTasks().Count; i++)
+        {
+            if (_taskList.GetTasks()[i] == task)
+            {
+                _taskList.GetTasks()[i].GetAttackPointCollider().enabled = true;
+            }
+            else 
+            {
+                _taskList.GetTasks()[i].GetTrailer().DetachTrailer();
+                _taskList.GetTasks()[i].GetAttackPointCollider().enabled = false;
+                _taskList.GetTasks()[i].CurrentStage = TrailerTask.TaskStage.TakeTrailer;
+
+            }
+            _taskList.GetTasks()[i].CheckStage();
         }
     }
-    
-    public void ActivateCurrentTask()
-    {
-        if (_taskList.GetCurrentTask().isDone == false)
-            _taskList.GetCurrentTask().StartTask();
-    }
-
     private void Update()
     {
         if (_taskList.GetCurrentTask() != null && _taskList.GetCurrentTask().TryToFinishTask())
         {
-            _taskList.GetCurrentTask().GetTrailer().DetachTrailer();
             _taskList.GetCurrentTask().FinishTask();
+            _taskList.GetCurrentTask().GetTrailer().DetachTrailer();
+            _taskList.GetCurrentTask().GetAttackPointCollider().enabled = false;
+
+            OnTaskCompleted?.Invoke();
         }
     }
-    private void DisableOtherTasks()
+    private void ChangeTaskStage(TrailerTask.TaskStage stageToSwitch)
     {
-        for (int i = 0; i < _taskList.GetTasks().Length; i++)
-        {
-            if (_taskList.GetCurrentTask() != _taskList.GetTasks()[i])
-            {
-                _taskList.GetTasks()[i].enabled = false;
-                if (_taskList.GetPreviousTask() != null)
-                    _taskList.GetPreviousTask().GetTrailer().DetachTrailer(); 
-                _taskList.GetTasks()[i].GetAttachPoint().enabled = false;
-                if (_taskList.GetTasks()[i].isDone == false)
-                    _taskList.GetTasks()[i].ActivateFirstStage();
-            }
-            else
-            {
-                _taskList.GetTasks()[i].enabled = true;
-                _taskList.GetTasks()[i].GetAttachPoint().enabled = true;
-            }
-        }
+        if (_taskList.GetCurrentTask().CurrentStage != TrailerTask.TaskStage.IsDone)
+            _taskList.GetCurrentTask().CurrentStage = stageToSwitch;
+        _taskList.GetCurrentTask().CheckStage();
+
     }
     private void OnDestroy()
     {
-        _taskList.OnSetTask -= DisableOtherTasks;
+        for (int i = 0; i < _taskList.GetTasks().Count; i++)
+        {
+            _taskList.GetTasks()[i].GetTrailer().OnTrailerAttached -= ChangeTaskStage;
+            _taskList.GetTasks()[i].GetTrailer().OnTrailerDetached -= ChangeTaskStage;
+        }
     }
+    
+
+
 }

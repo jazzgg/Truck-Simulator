@@ -4,37 +4,41 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class TaskList : MonoBehaviour
-{
-    public event Action OnSetTask;
+public class TaskList : MonoBehaviour 
+{ 
+    [SerializeField]
+    private List<TrailerTask> _tasks;
+    [SerializeField]
+    private TaskActivator _taskActivator;
 
     private TrailerTask _currentTask;
-    private TrailerTask _previousTask;
 
-    private TrailerTask[] _tasks;
+    private void Start()
+    {
+        _taskActivator.OnTaskCompleted += RemoveCurrentTask;
+
+        _currentTask = _tasks[0];
+    }
+    private void RemoveCurrentTask()
+    {
+        _tasks.Remove(_currentTask);
+    }
 
     public void SetCurrentTask(TrailerTask task)
     {
-        _previousTask = _currentTask;
         _currentTask = task;
-
-        OnSetTask?.Invoke();
-    }
-    public TrailerTask GetPreviousTask()
-    {
-        return _previousTask;
     }
     public TrailerTask GetCurrentTask()
     {
         return _currentTask;
     }
-    public TrailerTask[] GetTasks()
+    public List<TrailerTask> GetTasks()
     {
         return _tasks;
     }
-    private void Start()
+    private void OnDestroy()
     {
-        _tasks = GetComponentsInChildren<TrailerTask>();
+        _taskActivator.OnTaskCompleted -= RemoveCurrentTask;
     }
 }
  

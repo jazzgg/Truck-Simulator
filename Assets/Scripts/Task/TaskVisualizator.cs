@@ -4,32 +4,43 @@ using UnityEngine;
 using UnityEngine.UI;
 public class TaskVisualizator : MonoBehaviour
 {
+    [SerializeField]
     private TaskList _taskList;
-    private Image[] _tasksImages;
+    [SerializeField]
+    private TaskActivator _taskActivator;
 
-    private Image _currentTaskImg;
+    private List<Image> _images;
 
     private void Start()
     {
-        _taskList = GetComponent<TaskList>(); 
-        _currentTaskImg = _taskList.GetCurrentTask().GetComponent<Image>();
+        _taskActivator.OnTaskCompleted += RemoveImgTask;
 
-        _tasksImages = new Image[_taskList.GetTasks().Length];
+        _images = new List<Image>(_taskList.GetTasks().Count);
 
-        for (int i = 0; i < _tasksImages.Length; i++)
+        for (int i = 0; i < _taskList.GetTasks().Count; i++)
         {
-            _tasksImages[i] = _taskList.GetTasks()[i].GetComponent<Image>();
+            _images.Add(_taskList.GetTasks()[i].gameObject.GetComponent<Image>());
         }
     }
-
-    public void VisualizeSelectedTask()
+    private void RemoveImgTask()
     {
-        for (int i = 0; i < _tasksImages.Length; i++)
+        _images.Remove(_taskList.GetCurrentTask().GetComponent<Image>());
+    }
+
+    public void VisualizateCurrentTask(TrailerTask task)
+    {
+        for (int i = 0; i < _taskList.GetTasks().Count; i++)
         {
-            if (_taskList.GetCurrentTask() == _taskList.GetTasks()[i])
-                _currentTaskImg.color = new Color(_tasksImages[i].color.r, _tasksImages[i].color.g, _tasksImages[i].color.b, 255f);
+            if (_taskList.GetTasks()[i] == task) _images[i].color = new Color(_images[i].color.r, _images[i].color.g, _images[i].color.b, 255);
+
             else
-                _tasksImages[i].color = new Color(_tasksImages[i].color.r, _tasksImages[i].color.g, _tasksImages[i].color.b, 0.2f);
+            {
+                _images[i].color = new Color(_images[i].color.r, _images[i].color.g, _images[i].color.b, 0.2f);
+            }
         }
+    }
+    private void OnDestroy()
+    {
+        _taskActivator.OnTaskCompleted -= RemoveImgTask;
     }
 }

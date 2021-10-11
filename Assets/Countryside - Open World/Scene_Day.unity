@@ -1214,6 +1214,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b15c8021ad73a0c4f8681e81a5071dcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _taskList: {fileID: 582533420}
+  _taskVisualizator: {fileID: 582533421}
+  _taskActivator: {fileID: 582533422}
 --- !u!114 &582533420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1226,6 +1229,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0d882d0f2d8ef4e9677b5ae4725452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tasks:
+  - {fileID: 966022889}
+  - {fileID: 2108820581}
+  - {fileID: 850919508}
+  _taskActivator: {fileID: 582533422}
 --- !u!114 &582533421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1238,6 +1246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd0490130001fa45a7c0e6002081ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _taskList: {fileID: 582533420}
+  _taskActivator: {fileID: 582533422}
 --- !u!114 &582533422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1250,6 +1260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8838d01e436ee1246a40097a13f091ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _taskList: {fileID: 582533420}
 --- !u!114 &605164167 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6886675028609556709, guid: 3c49455ff7757444fa4b466c3250f423,
@@ -1819,12 +1830,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013d312abb22a924ea231ad65dc4a538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstStagetText: "\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0433\u0440\u0443\u0437\u043E\u0432\u0438\u043A"
-  _secondStageText: "\u043E\u0442\u0432\u0435\u0437\u0438\u0442\u0435 \u0433\u0440\u0443\u0437\u043E\u0432\u0438\u043A"
-  _taskCompletedText: "\u0412\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"
-  _minDistance: 3
+  CurrentStage: 0
   _trailer: {fileID: 1353083784}
   _finishPoint: {fileID: 1656839534}
+  _minDistance: 3
+  _takeTrailerText: "\u0412\u043E\u0437\u044C\u043C\u0438\u0442\u0435 \u043F\u0440\u0438\u0446\u0435\u043F"
+  _takeOutTrailerText: "\u041E\u0442\u0432\u0435\u0437\u0438\u0442\u0435 \u043F\u0440\u0438\u0446\u0435\u043F"
+  _isDoneText: "\u0412\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"
+  _stageText: {fileID: 341866327}
+  _taskButton: {fileID: 850919509}
+  _isDoneToggle: {fileID: 722697885}
 --- !u!114 &850919509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2001,12 +2016,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013d312abb22a924ea231ad65dc4a538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstStagetText: "\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0433\u0440\u0443\u0437\u043E\u0432\u0438\u043A"
-  _secondStageText: "\u043E\u0442\u0432\u0435\u0437\u0438\u0442\u0435 \u0433\u0440\u0443\u0437\u043E\u0432\u0438\u043A"
-  _taskCompletedText: "\u0412\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"
-  _minDistance: 3
+  CurrentStage: 0
   _trailer: {fileID: 1887528301}
   _finishPoint: {fileID: 1656839534}
+  _minDistance: 3
+  _takeTrailerText: "\u0412\u043E\u0437\u044C\u043C\u0438\u0442\u0435 \u043F\u0440\u0438\u0446\u0435\u043F"
+  _takeOutTrailerText: "\u041E\u0442\u0432\u0435\u0437\u0438\u0442\u0435 \u043F\u0440\u0438\u0446\u0435\u043F"
+  _isDoneText: "\u0412\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"
+  _stageText: {fileID: 849339907}
+  _taskButton: {fileID: 966022890}
+  _isDoneToggle: {fileID: 518800722}
 --- !u!114 &966022890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4085,12 +4104,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013d312abb22a924ea231ad65dc4a538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstStagetText: "\u0437\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u0433\u0440\u0443\u0437\u043E\u0432\u0438\u043A"
-  _secondStageText: "\u043E\u0442\u0432\u0435\u0437\u0438\u0442\u0435 \u0433\u0440\u0443\u0437\u043E\u0432\u0438\u043A"
-  _taskCompletedText: "\u0412\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"
-  _minDistance: 3
+  CurrentStage: 0
   _trailer: {fileID: 806961708}
   _finishPoint: {fileID: 1656839534}
+  _minDistance: 3
+  _takeTrailerText: "\u0412\u043E\u0437\u044C\u043C\u0438\u0442\u0435 \u043F\u0440\u0438\u0446\u0435\u043F"
+  _takeOutTrailerText: "\u041E\u0442\u0432\u0435\u0437\u0438\u0442\u0435 \u043F\u0440\u0438\u0446\u0435\u043F"
+  _isDoneText: "\u0412\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"
+  _stageText: {fileID: 471592778}
+  _taskButton: {fileID: 2108820582}
+  _isDoneToggle: {fileID: 219936695}
 --- !u!114 &2108820582
 MonoBehaviour:
   m_ObjectHideFlags: 0

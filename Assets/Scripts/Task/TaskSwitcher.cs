@@ -5,21 +5,17 @@ using UnityEngine;
 
 public class TaskSwitcher : MonoBehaviour
 {
+    [SerializeField]
     private TaskList _taskList;
+    [SerializeField]
     private TaskVisualizator _taskVisualizator;
+    [SerializeField]
     private TaskActivator _taskActivator;
-
-    private void Start()
-    {
-        _taskList = GetComponent<TaskList>();
-        _taskVisualizator = GetComponent<TaskVisualizator>(); 
-        _taskActivator = GetComponent<TaskActivator>();
-
-    }
     public void SwitchTask(TrailerTask task)
     {
         _taskList.SetCurrentTask(task);
-        _taskVisualizator.VisualizeSelectedTask();
-        _taskActivator.ActivateCurrentTask();
+        _taskVisualizator.VisualizateCurrentTask(task);
+        _taskActivator.DisableOtherTask(task);
+
     }
 }

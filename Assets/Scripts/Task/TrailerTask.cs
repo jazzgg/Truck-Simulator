@@ -6,75 +6,81 @@ using System;
 
 public class TrailerTask : MonoBehaviour
 {
-    public bool isDone { get; protected set; }
+    public TaskStage CurrentStage;
+    public bool isDone { get; private set; }
 
-    [SerializeField]
-    private string _firstStageText, _secondStageText, _taskCompletedText;
-    [SerializeField]
-    private float _minDistance;
     [SerializeField]
     private RCC_TruckTrailer _trailer;
     [SerializeField]
     private Transform _finishPoint;
+    [SerializeField]
+    private float _minDistance;
+    [SerializeField]
+    private string _takeTrailerText, _takeOutTrailerText, _isDoneText;
+    [SerializeField]
+    private Text _stageText;
+    [SerializeField]
+    private Button _taskButton;
+    [SerializeField]
+    private Toggle _isDoneToggle;
 
-    private Text _taskText;
-    private Toggle _isTaskDoneToggle;
     private BoxCollider _attachPointCollider;
 
-    private Button _taskButton;
-
-    private float _distance;
-
-    private void Start()
+ 
+    public enum TaskStage
     {
-       _taskText = GetComponentInChildren<Text>();
-       _isTaskDoneToggle = GetComponentInChildren<Toggle>();
-       _attachPointCollider = _trailer.GetComponentInChildren<RCC_TrailerAttachPoint>().GetComponent<BoxCollider>();
-       _taskButton = GetComponent<Button>();
+        TakeTrailer,
+        TakeOutTrailer,
+        IsDone
+    }
 
-       _distance = Vector3.Distance(_trailer.transform.position, _finishPoint.transform.position);
-    }
-    public RCC_TruckTrailer GetTrailer()
-    {
-        return _trailer;
-    }
-    public BoxCollider GetAttachPoint()
-    {
-        return _attachPointCollider;
-    }
     public bool TryToFinishTask()
     {
         if (Vector3.Distance(_trailer.transform.position, _finishPoint.position) < _minDistance)
         {
+            CurrentStage = TaskStage.IsDone;
+            CheckStage();
+
             return true;
         }
 
         return false;
     }
-    public void StartTask()
+    public void CheckStage()
     {
-        _trailer.OnTrailerAttached += ActivateSecondStage;
-
-        _isTaskDoneToggle.isOn = isDone;
-        _taskText.text = _firstStageText;
+        switch (CurrentStage)
+        {
+            case TaskStage.TakeTrailer:
+                _stageText.text = _takeTrailerText;
+                break;
+            case TaskStage.TakeOutTrailer:
+                _stageText.text = _takeOutTrailerText;
+                break;
+            case TaskStage.IsDone:
+                _stageText.text = _isDoneText;
+                isDone = true;
+                _isDoneToggle.isOn = isDone;
+                break;
+        }
     }
-    public void ActivateFirstStage()
+    public BoxCollider GetAttackPointCollider()
     {
-        _taskText.text = _firstStageText;
+        return _attachPointCollider;
     }
-    private void ActivateSecondStage()
+    public RCC_TruckTrailer GetTrailer()
     {
-        _taskText.text = _secondStageText;
+        return _trailer;
     }
     public void FinishTask()
     {
-        _trailer.OnTrailerAttached -= ActivateSecondStage;
-
-        isDone = true;
-
-        _isTaskDoneToggle.isOn = isDone;
-        _taskText.text = _taskCompletedText;
         _taskButton.interactable = false;
     }
+    private void Start()
+    {
+        CurrentStage = TaskStage.TakeTrailer;
+        _isDoneToggle.isOn = false;
+        _attachPointCollider = _trailer.GetComponentInChildren<RCC_TrailerAttachPoint>().GetComponent<BoxCollider>();
 
+        CheckStage();
+    }
 }

@@ -19,8 +19,8 @@ using System;
 [RequireComponent (typeof(Rigidbody))]
 [RequireComponent(typeof(ConfigurableJoint))]
 public class RCC_TruckTrailer : MonoBehaviour {
-	public event Action OnTrailerAttached;
-	public event Action OnTrailerDetached;
+	public event Action<TrailerTask.TaskStage> OnTrailerAttached;
+	public event Action<TrailerTask.TaskStage> OnTrailerDetached;
 
 	private RCC_CarControllerV3 carController;
 	private Rigidbody rigid;
@@ -220,7 +220,7 @@ public class RCC_TruckTrailer : MonoBehaviour {
 		if (RCC_SceneManager.Instance.activePlayerCamera && RCC_SceneManager.Instance.activePlayerCamera.TPSAutoFocus)
 			StartCoroutine(RCC_SceneManager.Instance.activePlayerCamera.AutoFocus ());
 
-		OnTrailerDetached?.Invoke();
+		OnTrailerDetached?.Invoke(TrailerTask.TaskStage.TakeTrailer);
 
 	}
 
@@ -229,6 +229,8 @@ public class RCC_TruckTrailer : MonoBehaviour {
 	/// </summary>
 	/// <param name="vehicle"></param>
 	public void AttachTrailer(RCC_CarControllerV3 vehicle){
+
+		OnTrailerAttached?.Invoke(TrailerTask.TaskStage.TakeOutTrailer);
 
 		// If delay is short, return.
 		if (timer > 0)
@@ -264,7 +266,6 @@ public class RCC_TruckTrailer : MonoBehaviour {
 		if (RCC_SceneManager.Instance.activePlayerCamera && RCC_SceneManager.Instance.activePlayerCamera.TPSAutoFocus)
 			StartCoroutine(RCC_SceneManager.Instance.activePlayerCamera.AutoFocus (transform, carController.transform));
 
-		OnTrailerAttached?.Invoke();
 	}
 
     private void Reset() {
