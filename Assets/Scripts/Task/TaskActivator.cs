@@ -7,8 +7,37 @@ public class TaskActivator : MonoBehaviour
 {
     public event Action OnTaskCompleted;
 
+    [SerializeField]
+    private GPS _gps;
+
     private TaskList _taskList;
 
+    public void DisableOtherTask(KeyValuePair<TrailerTask, TaskVisusalization> task)
+    {
+        foreach (var taskInList in _taskList.GetTasks())
+        {
+            if (taskInList.Key == task.Key)
+            {
+                taskInList.Key.GetAttackPointCollider().enabled = true;
+            }
+            else 
+            {
+                taskInList.Key.GetTrailer().DetachTrailer();
+                taskInList.Key.GetAttackPointCollider().enabled = false;
+                taskInList.Key.CurrentStage = TrailerTask.TaskStage.TakeTrailer;
+
+            }
+            taskInList.Key.CheckStage();
+        }
+    }
+    private void ChangeTaskStage(TrailerTask.TaskStage stageToSwitch)
+    {
+        if (_taskList.GetCurrentTask().Key.CurrentStage != TrailerTask.TaskStage.IsDone)
+            _taskList.GetCurrentTask().Key.CurrentStage = stageToSwitch;
+        if (stageToSwitch == TrailerTask.TaskStage.TakeOutTrailer) _gps.SetNewTarget(_taskList.GetCurrentTask().Key.GetFinishPoint());
+            _taskList.GetCurrentTask().Key.CheckStage();
+
+    }
     private void Start()
     {
         _taskList = GetComponent<TaskList>();
@@ -20,24 +49,6 @@ public class TaskActivator : MonoBehaviour
         }
 
     }
-    public void DisableOtherTask(KeyValuePair<TrailerTask, TaskVisusalization> task)
-    {
-        foreach (var taskk in _taskList.GetTasks())
-        {
-            if (taskk.Key == task.Key)
-            {
-                taskk.Key.GetAttackPointCollider().enabled = true;
-            }
-            else 
-            {
-                taskk.Key.GetTrailer().DetachTrailer();
-                taskk.Key.GetAttackPointCollider().enabled = false;
-                taskk.Key.CurrentStage = TrailerTask.TaskStage.TakeTrailer;
-
-            }
-            taskk.Key.CheckStage();
-        }
-    }
     private void Update()
     {
         if (_taskList.GetCurrentTask().Key != null && _taskList.GetCurrentTask().Key.TryToFinishTask())
@@ -48,13 +59,6 @@ public class TaskActivator : MonoBehaviour
 
             OnTaskCompleted?.Invoke();
         }
-    }
-    private void ChangeTaskStage(TrailerTask.TaskStage stageToSwitch)
-    {
-        if (_taskList.GetCurrentTask().Key.CurrentStage != TrailerTask.TaskStage.IsDone)
-            _taskList.GetCurrentTask().Key.CurrentStage = stageToSwitch;
-        _taskList.GetCurrentTask().Key.CheckStage();
-
     }
     private void OnDestroy()
     {

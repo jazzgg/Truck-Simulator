@@ -11,6 +11,8 @@ public class TaskSwitcher : MonoBehaviour
     private TaskVisualizator _taskVisualizator;
     [SerializeField]
     private TaskActivator _taskActivator;
+    [SerializeField]
+    private GPS _gps;
 
     private TrailerTask _task;
     private TaskVisusalization _taskVis;
@@ -21,6 +23,7 @@ public class TaskSwitcher : MonoBehaviour
         _taskList.SetCurrentTask(keyValuePair);
         _taskVisualizator.VisualizateCurrentTask(keyValuePair);
         _taskActivator.DisableOtherTask(keyValuePair);
+        _gps.SetNewTarget(_task.GetTrailer().transform.position);
     }
     public void SetTask(TrailerTask task)
     {

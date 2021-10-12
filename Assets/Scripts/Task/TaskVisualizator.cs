@@ -6,8 +6,6 @@ public class TaskVisualizator : MonoBehaviour
 {
     [SerializeField]
     private TaskList _taskList;
-    [SerializeField]
-    private TaskActivator _taskActivator;
 
     public void VisualizateCurrentTask(KeyValuePair<TrailerTask, TaskVisusalization> task)
     {

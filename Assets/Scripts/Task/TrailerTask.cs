@@ -20,11 +20,16 @@ public class TrailerTask : MonoBehaviour
     [SerializeField]
     private Text _stageText;
     [SerializeField]
+    private Text _priceText;
+    [SerializeField]
     private Button _taskButton;
     [SerializeField]
     private Toggle _isDoneToggle;
+    [SerializeField]
+    private int _taskPrice;
 
     private BoxCollider _attachPointCollider;
+
 
  
     public enum TaskStage
@@ -70,6 +75,10 @@ public class TrailerTask : MonoBehaviour
     public RCC_TruckTrailer GetTrailer()
     {
         return _trailer;
+    }
+    public Vector3 GetFinishPoint()
+    {
+        return _finishPoint.position;
     }
     public void FinishTask()
     {
