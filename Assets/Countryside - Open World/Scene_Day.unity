@@ -1229,10 +1229,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0d882d0f2d8ef4e9677b5ae4725452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tasks:
-  - {fileID: 966022889}
-  - {fileID: 2108820581}
-  - {fileID: 850919508}
+  _childList:
+  - {fileID: 966022888}
+  - {fileID: 2108820579}
+  - {fileID: 850919506}
   _taskActivator: {fileID: 582533422}
 --- !u!114 &582533421
 MonoBehaviour:
@@ -1260,7 +1260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8838d01e436ee1246a40097a13f091ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _taskList: {fileID: 582533420}
 --- !u!114 &605164167 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6886675028609556709, guid: 3c49455ff7757444fa4b466c3250f423,
@@ -1790,6 +1789,7 @@ GameObject:
   - component: {fileID: 850919510}
   - component: {fileID: 850919509}
   - component: {fileID: 850919508}
+  - component: {fileID: 850919512}
   m_Layer: 5
   m_Name: Task1 (2)
   m_TagString: Untagged
@@ -1884,11 +1884,33 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 582533419}
-        m_MethodName: SwitchTask
+        m_MethodName: SetTask
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 850919508}
           m_ObjectArgumentAssemblyTypeName: TrailerTask, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 582533419}
+        m_MethodName: SetTaskVis
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 850919512}
+          m_ObjectArgumentAssemblyTypeName: TaskVisusalization, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 582533419}
+        m_MethodName: SwitchTask
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1931,6 +1953,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 850919506}
   m_CullTransparentMesh: 0
+--- !u!114 &850919512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850919506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7cdb69be0f1ac54b8eba9c80c9a8e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _taskImg: {fileID: 850919510}
 --- !u!1 &857439230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1997,6 +2032,7 @@ GameObject:
   - component: {fileID: 966022891}
   - component: {fileID: 966022890}
   - component: {fileID: 966022889}
+  - component: {fileID: 966022894}
   m_Layer: 5
   m_Name: Task1
   m_TagString: Untagged
@@ -2070,11 +2106,33 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 582533419}
-        m_MethodName: SwitchTask
+        m_MethodName: SetTask
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 966022889}
           m_ObjectArgumentAssemblyTypeName: TrailerTask, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 582533419}
+        m_MethodName: SetTaskVis
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 966022894}
+          m_ObjectArgumentAssemblyTypeName: TaskVisusalization, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 582533419}
+        m_MethodName: SwitchTask
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2138,6 +2196,19 @@ RectTransform:
   m_AnchoredPosition: {x: 797, y: 181}
   m_SizeDelta: {x: 284.19, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &966022894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966022888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7cdb69be0f1ac54b8eba9c80c9a8e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _taskImg: {fileID: 966022891}
 --- !u!1001 &966280512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4064,6 +4135,7 @@ GameObject:
   - component: {fileID: 2108820583}
   - component: {fileID: 2108820582}
   - component: {fileID: 2108820581}
+  - component: {fileID: 2108820585}
   m_Layer: 5
   m_Name: Task1 (1)
   m_TagString: Untagged
@@ -4158,11 +4230,33 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 582533419}
-        m_MethodName: SwitchTask
+        m_MethodName: SetTask
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 2108820581}
           m_ObjectArgumentAssemblyTypeName: TrailerTask, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 582533419}
+        m_MethodName: SetTaskVis
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2108820585}
+          m_ObjectArgumentAssemblyTypeName: TaskVisusalization, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 582533419}
+        m_MethodName: SwitchTask
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4205,6 +4299,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2108820579}
   m_CullTransparentMesh: 0
+--- !u!114 &2108820585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108820579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7cdb69be0f1ac54b8eba9c80c9a8e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _taskImg: {fileID: 2108820583}
 --- !u!1 &2137895695
 GameObject:
   m_ObjectHideFlags: 0

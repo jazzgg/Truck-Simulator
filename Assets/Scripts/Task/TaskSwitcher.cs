@@ -11,11 +11,23 @@ public class TaskSwitcher : MonoBehaviour
     private TaskVisualizator _taskVisualizator;
     [SerializeField]
     private TaskActivator _taskActivator;
-    public void SwitchTask(TrailerTask task)
-    {
-        _taskList.SetCurrentTask(task);
-        _taskVisualizator.VisualizateCurrentTask(task);
-        _taskActivator.DisableOtherTask(task);
 
+    private TrailerTask _task;
+    private TaskVisusalization _taskVis;
+    public void SwitchTask()
+    {
+        var keyValuePair = new KeyValuePair<TrailerTask, TaskVisusalization>(_task, _taskVis);
+
+        _taskList.SetCurrentTask(keyValuePair);
+        _taskVisualizator.VisualizateCurrentTask(keyValuePair);
+        _taskActivator.DisableOtherTask(keyValuePair);
+    }
+    public void SetTask(TrailerTask task)
+    {
+        _task = task;
+    }
+    public void SetTaskVis(TaskVisusalization taskVis)
+    {
+        _taskVis = taskVis;
     }
 }

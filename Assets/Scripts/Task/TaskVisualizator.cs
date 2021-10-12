@@ -9,38 +9,16 @@ public class TaskVisualizator : MonoBehaviour
     [SerializeField]
     private TaskActivator _taskActivator;
 
-    private List<Image> _images;
-
-    private void Start()
+    public void VisualizateCurrentTask(KeyValuePair<TrailerTask, TaskVisusalization> task)
     {
-        _taskActivator.OnTaskCompleted += RemoveImgTask;
-
-        _images = new List<Image>(_taskList.GetTasks().Count);
-
-        for (int i = 0; i < _taskList.GetTasks().Count; i++)
+        foreach (var task1 in _taskList.GetTasks())
         {
-            _images.Add(_taskList.GetTasks()[i].gameObject.GetComponent<Image>());
-        }
-    }
-    private void RemoveImgTask()
-    {
-        _images.Remove(_taskList.GetCurrentTask().GetComponent<Image>());
-    }
-
-    public void VisualizateCurrentTask(TrailerTask task)
-    {
-        for (int i = 0; i < _taskList.GetTasks().Count; i++)
-        {
-            if (_taskList.GetTasks()[i] == task) _images[i].color = new Color(_images[i].color.r, _images[i].color.g, _images[i].color.b, 255);
-
-            else
+            if (task1.Key == task.Key)
             {
-                _images[i].color = new Color(_images[i].color.r, _images[i].color.g, _images[i].color.b, 0.2f);
+                task1.Value.MakeActive();
             }
+
+            else task1.Value.MakeInactive();
         }
-    }
-    private void OnDestroy()
-    {
-        _taskActivator.OnTaskCompleted -= RemoveImgTask;
     }
 }

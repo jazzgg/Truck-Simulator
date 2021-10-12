@@ -5,34 +5,39 @@ using UnityEngine.UI;
 using System;
 
 public class TaskList : MonoBehaviour 
-{ 
+{
     [SerializeField]
-    private List<TrailerTask> _tasks;
+    private GameObject[] _childList; 
+    private Dictionary<TrailerTask, TaskVisusalization> _tasks;
     [SerializeField]
     private TaskActivator _taskActivator;
-
-    private TrailerTask _currentTask;
+    private KeyValuePair<TrailerTask, TaskVisusalization> _currentTask;
 
     private void Start()
     {
-        _taskActivator.OnTaskCompleted += RemoveCurrentTask;
+        _tasks = new Dictionary<TrailerTask, TaskVisusalization>();
+        
+        foreach (var child in _childList)
+        {
+            _tasks.Add(child.GetComponent<TrailerTask>(), child.GetComponent<TaskVisusalization>());
+        } 
 
-        _currentTask = _tasks[0];
+        _taskActivator.OnTaskCompleted += RemoveCurrentTask;
     }
     private void RemoveCurrentTask()
     {
-        _tasks.Remove(_currentTask);
+        _tasks.Remove(_currentTask.Key);
     }
 
-    public void SetCurrentTask(TrailerTask task)
+    public void SetCurrentTask(KeyValuePair<TrailerTask, TaskVisusalization> task)
     {
         _currentTask = task;
     }
-    public TrailerTask GetCurrentTask()
+    public KeyValuePair<TrailerTask, TaskVisusalization> GetCurrentTask()
     {
         return _currentTask;
     }
-    public List<TrailerTask> GetTasks()
+    public Dictionary<TrailerTask, TaskVisusalization> GetTasks()
     {
         return _tasks;
     }
