@@ -4,46 +4,26 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
+
 public class TaskList : MonoBehaviour 
 {
     [SerializeField]
-    private GameObject[] _childList; 
-    private Dictionary<TrailerTask, TaskVisusalization> _tasks;
+    private List<TrailerTask> _tasks;
     [SerializeField]
-    private TaskActivator _taskActivator;
-    private KeyValuePair<TrailerTask, TaskVisusalization> _currentTask;
+    private List<Button> _tasksVis;
 
-    private void Start()
+    public void RemoveCurrentTask(TrailerTask trailerTask)
     {
-        _tasks = new Dictionary<TrailerTask, TaskVisusalization>();
-        
-        foreach (var child in _childList)
-        {
-            _tasks.Add(child.GetComponent<TrailerTask>(), child.GetComponent<TaskVisusalization>());
-        } 
+        int index = _tasks.IndexOf(trailerTask);
 
-        _taskActivator.OnTaskCompleted += RemoveCurrentTask;
-    }
-    private void RemoveCurrentTask()
-    {
-        _tasks.Remove(_currentTask.Key);
-    }
+        VisualizeRemovedTask(index);
 
-    public void SetCurrentTask(KeyValuePair<TrailerTask, TaskVisusalization> task)
-    {
-        _currentTask = task;
+        _tasksVis.RemoveAt(index);
+        _tasks.RemoveAt(index);
     }
-    public KeyValuePair<TrailerTask, TaskVisusalization> GetCurrentTask()
+    private void VisualizeRemovedTask(int index)
     {
-        return _currentTask;
-    }
-    public Dictionary<TrailerTask, TaskVisusalization> GetTasks()
-    {
-        return _tasks;
-    }
-    private void OnDestroy()
-    {
-        _taskActivator.OnTaskCompleted -= RemoveCurrentTask;
+        _tasksVis[index].interactable = false;
     }
 }
  

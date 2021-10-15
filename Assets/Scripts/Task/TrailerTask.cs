@@ -6,65 +6,66 @@ using System;
 
 public class TrailerTask : MonoBehaviour
 {
-    public TaskStage CurrentStage;
+    public event Action<Vector3> OnStateChanged;
+    public event Action OnTaskCompleted;
     public bool isDone { get; private set; }
+    [HideInInspector]
+    public bool isWorking = false;
 
     [SerializeField]
     private RCC_TruckTrailer _trailer;
     [SerializeField]
     private Transform _finishPoint;
     [SerializeField]
+    private Transform _startPoint;
+    [SerializeField]
     private float _minDistance;
-    [SerializeField]
-    private string _takeTrailerText, _takeOutTrailerText, _isDoneText;
-    [SerializeField]
-    private Text _stageText;
-    [SerializeField]
-    private Text _priceText;
-    [SerializeField]
-    private Button _taskButton;
-    [SerializeField]
-    private Toggle _isDoneToggle;
     [SerializeField]
     private int _taskPrice;
 
     private BoxCollider _attachPointCollider;
+    private Vector3 _currentTarget;
+    private TaskStage CurrentStage;
 
-
- 
     public enum TaskStage
     {
         TakeTrailer,
         TakeOutTrailer,
         IsDone
     }
-
+    public void Initialize()
+    {
+        CurrentStage = TaskStage.TakeTrailer;
+        SetStage();
+    }
     public bool TryToFinishTask()
     {
         if (Vector3.Distance(_trailer.transform.position, _finishPoint.position) < _minDistance)
         {
+            isWorking = false;
             CurrentStage = TaskStage.IsDone;
-            CheckStage();
+            SetStage();
 
             return true;
         }
 
         return false;
     }
-    public void CheckStage()
+    public void SetStage()
     {
         switch (CurrentStage)
         {
             case TaskStage.TakeTrailer:
-                _stageText.text = _takeTrailerText;
+                _currentTarget = _trailer.transform.position;
+                OnStateChanged?.Invoke(_currentTarget);
                 break;
             case TaskStage.TakeOutTrailer:
-                _stageText.text = _takeOutTrailerText;
+                _currentTarget = _finishPoint.position;
+                OnStateChanged?.Invoke(_currentTarget);
                 break;
             case TaskStage.IsDone:
-                _stageText.text = _isDoneText;
                 isDone = true;
-                _isDoneToggle.isOn = isDone;
+                OnTaskCompleted?.Invoke();
                 break;
         }
     }
@@ -80,16 +81,40 @@ public class TrailerTask : MonoBehaviour
     {
         return _finishPoint.position;
     }
-    public void FinishTask()
+    public Vector3 GetCurrentTarget()
     {
-        _taskButton.interactable = false;
+        return _currentTarget;
+    }
+    public Vector3 GetStartPoint()
+    {
+        return _startPoint.position;
+    }
+    public int GetTaskPrice()
+    {
+        return _taskPrice;
+    }
+    private void OnTrailerAttachedChangeStage()
+    {
+        CurrentStage = TaskStage.TakeOutTrailer;
+        SetStage();
+        
     }
     private void Start()
     {
-        CurrentStage = TaskStage.TakeTrailer;
-        _isDoneToggle.isOn = false;
-        _attachPointCollider = _trailer.GetComponentInChildren<RCC_TrailerAttachPoint>().GetComponent<BoxCollider>();
+        _trailer.OnTrailerAttached += OnTrailerAttachedChangeStage;
 
-        CheckStage();
+        _attachPointCollider = _trailer.GetComponentInChildren<RCC_TrailerAttachPoint>().GetComponent<BoxCollider>();
+    }
+    private void Update()
+    {
+        if (isWorking && TryToFinishTask())
+        {
+            CurrentStage = TaskStage.IsDone;
+            SetStage();
+        }
+    }
+    private void OnDestroy()
+    {
+        _trailer.OnTrailerAttached -= OnTrailerAttachedChangeStage;
     }
 }

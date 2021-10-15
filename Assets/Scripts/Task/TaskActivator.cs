@@ -9,66 +9,54 @@ public class TaskActivator : MonoBehaviour
 
     [SerializeField]
     private GPS _gps;
-
+    [SerializeField]
+    private Player _player;
+    [SerializeField]
+    private TaskFinalScreen _taskFinalScreen;
+    [SerializeField]
     private TaskList _taskList;
+    [SerializeField]
+    private TaskTriggersActivator _taskTriggersActivator;
+    [SerializeField]
+    private NavigatorArrow _navigatorArrow;
 
-    public void DisableOtherTask(KeyValuePair<TrailerTask, TaskVisusalization> task)
+    private TrailerTask _task;
+
+    public void StartTask(TrailerTask task)
     {
-        foreach (var taskInList in _taskList.GetTasks())
-        {
-            if (taskInList.Key == task.Key)
-            {
-                taskInList.Key.GetAttackPointCollider().enabled = true;
-            }
-            else 
-            {
-                taskInList.Key.GetTrailer().DetachTrailer();
-                taskInList.Key.GetAttackPointCollider().enabled = false;
-                taskInList.Key.CurrentStage = TrailerTask.TaskStage.TakeTrailer;
+        _navigatorArrow.gameObject.SetActive(true);
 
-            }
-            taskInList.Key.CheckStage();
-        }
+        task.isWorking = true;
+
+        task.OnTaskCompleted += FinishTask;
+        task.OnStateChanged += _gps.SetNewTarget;
+        task.OnStateChanged += _navigatorArrow.SetTarget;
+         
+        task.Initialize();
+
+        _player.transform.position = task.GetStartPoint();
+        _taskTriggersActivator.StartCoroutine(_taskTriggersActivator.DisableTriggersWithDelay(1));
+        _task = task;
     }
-    private void ChangeTaskStage(TrailerTask.TaskStage stageToSwitch)
+    public void FinishTask()
     {
-        if (_taskList.GetCurrentTask().Key.CurrentStage != TrailerTask.TaskStage.IsDone)
-            _taskList.GetCurrentTask().Key.CurrentStage = stageToSwitch;
-        if (stageToSwitch == TrailerTask.TaskStage.TakeOutTrailer) _gps.SetNewTarget(_taskList.GetCurrentTask().Key.GetFinishPoint());
-            _taskList.GetCurrentTask().Key.CheckStage();
+        _navigatorArrow.gameObject.SetActive(false);
+
+        _task.OnStateChanged -= _gps.SetNewTarget;
+        _task.OnStateChanged -= _navigatorArrow.SetTarget;
+        _task.OnTaskCompleted -= FinishTask;
+
+        var taskPrice = _task.GetTaskPrice();
+
+        _task.GetTrailer().DetachTrailer();
+        _taskFinalScreen.FillUI(taskPrice);
+        _taskFinalScreen.MakeFinalScreenActive();
+        _taskFinalScreen.SetScore(taskPrice);
+        _taskList.RemoveCurrentTask(_task);
+        _taskTriggersActivator.EnableTriggers();
+        _navigatorArrow.SetTarget(Vector3.zero);
+        _gps.StopTargetFollow();
 
     }
-    private void Start()
-    {
-        _taskList = GetComponent<TaskList>();
-
-        foreach (var task in _taskList.GetTasks())
-        {
-            task.Key.GetTrailer().OnTrailerAttached += ChangeTaskStage;
-            task.Key.GetTrailer().OnTrailerDetached += ChangeTaskStage;
-        }
-
-    }
-    private void Update()
-    {
-        if (_taskList.GetCurrentTask().Key != null && _taskList.GetCurrentTask().Key.TryToFinishTask())
-        {
-            _taskList.GetCurrentTask().Key.FinishTask();
-            _taskList.GetCurrentTask().Key.GetTrailer().DetachTrailer();
-            _taskList.GetCurrentTask().Key.GetAttackPointCollider().enabled = false;
-
-            OnTaskCompleted?.Invoke();
-        }
-    }
-    private void OnDestroy()
-    {
-        foreach (var task in _taskList.GetTasks())
-        {
-            task.Key.GetTrailer().OnTrailerAttached -= ChangeTaskStage;
-            task.Key.GetTrailer().OnTrailerDetached -= ChangeTaskStage;
-        }
-    }
-    
-
 
 }

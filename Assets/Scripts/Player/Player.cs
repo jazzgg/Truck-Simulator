@@ -1,18 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public delegate void OnValueChangedDel();
 
-    // Update is called once per frame
-    void Update()
+    public OnValueChangedDel OnScoreValueChanged;
+
+    public PlayerData Data;
+
+    [SerializeField]
+    private Text _score;
+
+    private void Start()
     {
-        
+        OnScoreValueChanged += ChangeUI;
+
+        ChangeUI();
+    }
+    private void ChangeUI()
+    {
+        _score.text = Data.Score.ToString();
+    }
+    
+    private void OnDestroy()
+    {
+        OnScoreValueChanged -= ChangeUI;
     }
 }
+

@@ -49,7 +49,7 @@ namespace InsaneSystems.RoadNavigator
 			{
 				if (!connectedPoints[i])
 				{
-					Debug.LogWarning("[Road GPS Navigator] Point '" + name + "' connected points " + i + " is empty! fill it or delete from array.");
+					//Debug.LogWarning("[Road GPS Navigator] Point '" + name + "' connected points " + i + " is empty! fill it or delete from array.");
 					continue;
 				}
 
