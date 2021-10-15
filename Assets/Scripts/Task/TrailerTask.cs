@@ -130,7 +130,6 @@ public class TrailerTask : MonoBehaviour
             && Vector3.Distance(_trailer.transform.position, _player.position) < _minDistanceToTrailer)
         {
             OnTruckNearToTrailer?.Invoke();
-            print("!");
         }
         else if(CurrentStage == TaskStage.TakeTrailer) OnTruckFarFromTrailer?.Invoke();
     }
