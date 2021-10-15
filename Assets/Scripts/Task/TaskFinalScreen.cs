@@ -14,7 +14,7 @@ public class TaskFinalScreen : MonoBehaviour
 
     private int _scoreAmount;
 
-    public void FillUI(int score)
+    public void FillUI(int score) //fill ui by using current Task price
     {
         _text.text = score.ToString();
     }
@@ -26,14 +26,18 @@ public class TaskFinalScreen : MonoBehaviour
     {
         _finalScreen.SetActive(false);
     }
-    public void SetScore(int score)
+    public void SetCurrentTaskPrice(TrailerTask task) 
     {
-        _scoreAmount = score;
+        _scoreAmount = task.GetTaskPrice();
     }
-    public void GetScore()
+    public void SetScore()
     {
-        _player.Data.Score += _scoreAmount;
-        _player.OnScoreValueChanged?.Invoke();
+        var newData = new PlayerData()
+        {
+            Score = _player.GetData().Score += _scoreAmount
+        };
+
+        _player.SetData(newData);
     }
     private void Start()
     {

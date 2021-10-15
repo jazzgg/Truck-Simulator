@@ -17,11 +17,11 @@ public class SaveHandler : MonoBehaviour
     }
     public void Load()
     {
-        _player.Data = _saveSystem.Load();   
+        _player.SetData(_saveSystem.Load());
     }
     public void Save()
     {
-       _saveSystem.Save(_player.Data);
+       _saveSystem.Save(_player.GetData());
     }
     private void OnApplicationQuit()
     {

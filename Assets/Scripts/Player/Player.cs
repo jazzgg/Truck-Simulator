@@ -6,29 +6,28 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public delegate void OnValueChangedDel();
-
-    public OnValueChangedDel OnScoreValueChanged;
-
-    public PlayerData Data;
+    private PlayerData _data;
 
     [SerializeField]
     private Text _score;
 
+    public void SetData(PlayerData newData)
+    {
+        _data = newData;
+
+        ChangeUI();
+    }
+    public PlayerData GetData()
+    {
+        return _data;
+    }
     private void Start()
     {
-        OnScoreValueChanged += ChangeUI;
-
         ChangeUI();
     }
     private void ChangeUI()
     {
-        _score.text = Data.Score.ToString();
-    }
-    
-    private void OnDestroy()
-    {
-        OnScoreValueChanged -= ChangeUI;
+        _score.text = _data.Score.ToString();
     }
 }
 

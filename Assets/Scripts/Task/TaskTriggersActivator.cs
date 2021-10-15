@@ -5,7 +5,7 @@ using UnityEngine;
 public class TaskTriggersActivator : MonoBehaviour
 {
     [SerializeField]
-    private Collider[] _triggers;
+    private Collider[] _triggers; //triggers colliders
 
     public void EnableTriggers()
     {
@@ -21,7 +21,7 @@ public class TaskTriggersActivator : MonoBehaviour
             trigger.enabled = false;
         }
     }
-    public IEnumerator DisableTriggersWithDelay(float delay)
+    public IEnumerator DisableTriggersWithDelay(float delay) // this one needed for disable with delay, if we just disable triggers the task window will stay at the screen
     {
         yield return new WaitForSeconds(delay);
     }

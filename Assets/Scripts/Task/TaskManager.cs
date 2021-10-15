@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class TaskActivator : MonoBehaviour
+public class TaskManager : MonoBehaviour
 {
+    //this class enable everything what connected with task
+
     public event Action OnTaskCompleted;
 
     [SerializeField]
@@ -22,7 +24,7 @@ public class TaskActivator : MonoBehaviour
 
     private TrailerTask _task;
 
-    public void StartTask(TrailerTask task)
+    public void StartTask(TrailerTask task) // called by button and takes task which was clicked
     {
         _navigatorArrow.gameObject.SetActive(true);
 
@@ -38,7 +40,7 @@ public class TaskActivator : MonoBehaviour
         _taskTriggersActivator.StartCoroutine(_taskTriggersActivator.DisableTriggersWithDelay(1));
         _task = task;
     }
-    public void FinishTask()
+    public void FinishTask() // called by current task event (OnTaskCompleted) 
     {
         _navigatorArrow.gameObject.SetActive(false);
 
@@ -51,7 +53,7 @@ public class TaskActivator : MonoBehaviour
         _task.GetTrailer().DetachTrailer();
         _taskFinalScreen.FillUI(taskPrice);
         _taskFinalScreen.MakeFinalScreenActive();
-        _taskFinalScreen.SetScore(taskPrice);
+        _taskFinalScreen.SetCurrentTaskPrice(_task);
         _taskList.RemoveCurrentTask(_task);
         _taskTriggersActivator.EnableTriggers();
         _navigatorArrow.SetTarget(Vector3.zero);

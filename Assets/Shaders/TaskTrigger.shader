@@ -26,7 +26,7 @@
 		fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
 		o.Albedo = c.rgb;
 		o.Emission = _Emission;
-		o.Alpha = 1 - IN.uv_MainTex.y;
+		o.Alpha = 1 - IN.uv_MainTex.y; // just invert uv 
 	}
 	ENDCG
 	}

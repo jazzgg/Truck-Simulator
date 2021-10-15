@@ -6,8 +6,8 @@ using System;
 
 public class TrailerTask : MonoBehaviour
 {
-    public event Action<Vector3> OnStateChanged;
-    public event Action OnTaskCompleted;
+    public event Action<Vector3> OnStateChanged; //this one created for gps and navigator arrow
+    public event Action OnTaskCompleted; 
     public bool isDone { get; private set; }
     [HideInInspector]
     public bool isWorking = false;
@@ -33,12 +33,14 @@ public class TrailerTask : MonoBehaviour
         TakeOutTrailer,
         IsDone
     }
-    public void Initialize()
+    public void Initialize() //called when task become active
     {
+        _trailer.gameObject.SetActive(true);
+
         CurrentStage = TaskStage.TakeTrailer;
         SetStage();
     }
-    public bool TryToFinishTask()
+    public bool TryToFinishTask() //Check distance btw trailer and finish point
     {
         if (Vector3.Distance(_trailer.transform.position, _finishPoint.position) < _minDistance)
         {
@@ -51,7 +53,7 @@ public class TrailerTask : MonoBehaviour
 
         return false;
     }
-    public void SetStage()
+    public void SetStage() //Set Stage and choose necessary settings
     {
         switch (CurrentStage)
         {
@@ -69,6 +71,9 @@ public class TrailerTask : MonoBehaviour
                 break;
         }
     }
+
+    //Get Functions Region
+    #region 
     public BoxCollider GetAttackPointCollider()
     {
         return _attachPointCollider;
@@ -93,15 +98,16 @@ public class TrailerTask : MonoBehaviour
     {
         return _taskPrice;
     }
-    private void OnTrailerAttachedChangeStage()
+    #endregion 
+    private void OnTrailerAttachedChangeStage() // called when trailer is attached
     {
         CurrentStage = TaskStage.TakeOutTrailer;
         SetStage();
-        
     }
     private void Start()
     {
         _trailer.OnTrailerAttached += OnTrailerAttachedChangeStage;
+        _trailer.gameObject.SetActive(false);
 
         _attachPointCollider = _trailer.GetComponentInChildren<RCC_TrailerAttachPoint>().GetComponent<BoxCollider>();
     }
@@ -110,7 +116,7 @@ public class TrailerTask : MonoBehaviour
         if (isWorking && TryToFinishTask())
         {
             CurrentStage = TaskStage.IsDone;
-            SetStage();
+            SetStage(); //use for update state
         }
     }
     private void OnDestroy()
