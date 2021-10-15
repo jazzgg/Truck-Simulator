@@ -16,7 +16,7 @@ public class SaveHandler : MonoBehaviour
     }
     public void Load()
     {
-        _player.TryToSetData(_saveSystem.Load());
+        _player.SetData(_saveSystem.Load());
     }
     public void Save()
     {

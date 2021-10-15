@@ -7,11 +7,15 @@ using System;
 public class TrailerTask : MonoBehaviour
 {
     public event Action<Vector3> OnStateChanged; //this one created for gps and navigator arrow
-    public event Action OnTaskCompleted; 
+    public event Action OnTaskCompleted;
+    public event Action OnTruckNearToTrailer;
+    public event Action OnTruckFarFromTrailer;
     public bool isDone { get; private set; }
     [HideInInspector]
     public bool isWorking = false;
 
+    [SerializeField]
+    private Transform _player;
     [SerializeField]
     private RCC_TruckTrailer _trailer;
     [SerializeField]
@@ -19,7 +23,9 @@ public class TrailerTask : MonoBehaviour
     [SerializeField]
     private Transform _startPoint;
     [SerializeField]
-    private float _minDistance;
+    private float _minDistance; // min distance to finish for win
+    [SerializeField]
+    private float _minDistanceToTrailer;
     [SerializeField]
     private int _taskPrice;
 
@@ -101,6 +107,8 @@ public class TrailerTask : MonoBehaviour
     #endregion 
     private void OnTrailerAttachedChangeStage() // called when trailer is attached
     {
+        OnTruckFarFromTrailer?.Invoke(); // this one for switch cam to default mode
+
         CurrentStage = TaskStage.TakeOutTrailer;
         SetStage();
     }
@@ -118,6 +126,13 @@ public class TrailerTask : MonoBehaviour
             CurrentStage = TaskStage.IsDone;
             SetStage(); //use for update state
         }
+        if (CurrentStage == TaskStage.TakeTrailer
+            && Vector3.Distance(_trailer.transform.position, _player.position) < _minDistanceToTrailer)
+        {
+            OnTruckNearToTrailer?.Invoke();
+            print("!");
+        }
+        else if(CurrentStage == TaskStage.TakeTrailer) OnTruckFarFromTrailer?.Invoke();
     }
     private void OnDestroy()
     {

@@ -6,24 +6,26 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    private PlayerData _data;
+    public PlayerData _data;
 
     [SerializeField]
     private Text _score;
 
-    public bool TryToSetData(PlayerData newData)
+    public void SetData(PlayerData newData)
     {
         _data = newData;
 
         ChangeUI();
-
-        return true;
     }
     public PlayerData GetData()
     {
         return _data;
     }
     private void Start()
+    {
+        ChangeUI();
+    }
+    private void Update()
     {
         ChangeUI();
     }

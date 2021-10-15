@@ -11,38 +11,33 @@ public class TaskFinalScreen : MonoBehaviour
     private Text _text;
     [SerializeField]
     private Player _player;
+    [SerializeField]
+    private Button _getButton;
 
     private int _scoreAmount;
 
-    public void FillUI(int score) //fill ui by using current Task price
+    public void FillUI(int score) //fill UI by using current Task price
     {
         _text.text = score.ToString();
     }
     public void MakeFinalScreenActive()
     {
         _finalScreen.SetActive(true);
+        _getButton.interactable = true;
     }
     public void MakeFinalScreenInActive()
     {
         _finalScreen.SetActive(false);
     }
-    public void SetCurrentTaskPrice(TrailerTask task) 
+    public void SetCurrentTaskPrice(int score) 
     {
-        _scoreAmount = task.GetTaskPrice();
+        _scoreAmount = score;
     }
-    public void SetScore(Button button)
+    public void SetScore()
     {
-        var score = _player.GetData().Score += _scoreAmount;
+        _player._data.Score += _scoreAmount; 
 
-        var newData = new PlayerData()
-        {
-            Score = score
-        };
-
-        if (_player.TryToSetData(newData))
-        {
-            button.interactable = false;  
-        }
+        _getButton.interactable = false;
     }
     private void Start()
     {

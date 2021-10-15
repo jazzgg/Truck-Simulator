@@ -21,10 +21,12 @@ public class TaskManager : MonoBehaviour
     private TaskTriggersActivator _taskTriggersActivator;
     [SerializeField]
     private NavigatorArrow _navigatorArrow;
+    [SerializeField]
+    private CamerasSwitcher _camSwitcher;
 
     private TrailerTask _task;
 
-    public void StartTask(TrailerTask task) // called by button and takes task which was clicked
+    public void StartTask(TrailerTask task) // called by button and takes task logic connected with task button which was clicked
     {
         _navigatorArrow.gameObject.SetActive(true);
 
@@ -33,6 +35,8 @@ public class TaskManager : MonoBehaviour
         task.OnTaskCompleted += FinishTask;
         task.OnStateChanged += _gps.SetNewTarget;
         task.OnStateChanged += _navigatorArrow.SetTarget;
+        task.OnTruckNearToTrailer += _camSwitcher.ActivateCustomCam;
+        task.OnTruckFarFromTrailer += _camSwitcher.ReturnToDefaultCam;
          
         task.Initialize();
 
@@ -47,13 +51,15 @@ public class TaskManager : MonoBehaviour
         _task.OnStateChanged -= _gps.SetNewTarget;
         _task.OnStateChanged -= _navigatorArrow.SetTarget;
         _task.OnTaskCompleted -= FinishTask;
+        _task.OnTruckNearToTrailer -= _camSwitcher.ActivateCustomCam;
+        _task.OnTruckFarFromTrailer -= _camSwitcher.ReturnToDefaultCam;
 
         var taskPrice = _task.GetTaskPrice();
 
         _task.GetTrailer().DetachTrailer();
         _taskFinalScreen.FillUI(taskPrice);
         _taskFinalScreen.MakeFinalScreenActive();
-        _taskFinalScreen.SetCurrentTaskPrice(_task);
+        _taskFinalScreen.SetCurrentTaskPrice(taskPrice);
         _taskList.RemoveCurrentTask(_task);
         _taskTriggersActivator.EnableTriggers();
         _navigatorArrow.SetTarget(Vector3.zero);
