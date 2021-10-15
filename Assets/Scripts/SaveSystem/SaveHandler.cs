@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 public class SaveHandler : MonoBehaviour
 {
     [SerializeField]
@@ -17,7 +16,7 @@ public class SaveHandler : MonoBehaviour
     }
     public void Load()
     {
-        _player.SetData(_saveSystem.Load());
+        _player.TryToSetData(_saveSystem.Load());
     }
     public void Save()
     {

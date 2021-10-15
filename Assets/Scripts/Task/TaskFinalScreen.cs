@@ -30,14 +30,19 @@ public class TaskFinalScreen : MonoBehaviour
     {
         _scoreAmount = task.GetTaskPrice();
     }
-    public void SetScore()
+    public void SetScore(Button button)
     {
+        var score = _player.GetData().Score += _scoreAmount;
+
         var newData = new PlayerData()
         {
-            Score = _player.GetData().Score += _scoreAmount
+            Score = score
         };
 
-        _player.SetData(newData);
+        if (_player.TryToSetData(newData))
+        {
+            button.interactable = false;  
+        }
     }
     private void Start()
     {

@@ -11,11 +11,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Text _score;
 
-    public void SetData(PlayerData newData)
+    public bool TryToSetData(PlayerData newData)
     {
         _data = newData;
 
         ChangeUI();
+
+        return true;
     }
     public PlayerData GetData()
     {

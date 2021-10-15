@@ -33,7 +33,7 @@ public class SaveSystem
             }
         }
 
-        if (string.IsNullOrEmpty(json)) return new PlayerData();
+        if (string.IsNullOrEmpty(json)) return new PlayerData() { Score = 0};
 
         return JsonUtility.FromJson<PlayerData>(json);
     }
