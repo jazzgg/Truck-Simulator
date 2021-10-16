@@ -23,6 +23,8 @@ public class TaskManager : MonoBehaviour
     private NavigatorArrow _navigatorArrow;
     [SerializeField]
     private CamerasSwitcher _camSwitcher;
+    [SerializeField]
+    private TaskFinish _trailerDetacher;
 
     private TrailerTask _task;
 
@@ -37,11 +39,17 @@ public class TaskManager : MonoBehaviour
         task.OnStateChanged += _navigatorArrow.SetTarget;
         task.OnTruckNearToTrailer += _camSwitcher.ActivateCustomCam;
         task.OnTruckFarFromTrailer += _camSwitcher.ReturnToDefaultCam;
+        task.OnTryToFinishTask += _trailerDetacher.MakeButtonActive;
+        task.OnNoneTryToFinishTask += _trailerDetacher.MakeButtonInActive;
          
         task.Initialize();
 
         _player.transform.position = task.GetStartPoint();
         _taskTriggersActivator.StartCoroutine(_taskTriggersActivator.DisableTriggersWithDelay(1));
+        _trailerDetacher.SetCurrentTask(task);
+        _taskFinalScreen.SetCurrentTaskPrice(task.GetTaskPrice());
+        _taskFinalScreen.FillUI(task.GetTaskPrice());
+
         _task = task;
     }
     public void FinishTask() // called by current task event (OnTaskCompleted) 
@@ -53,15 +61,10 @@ public class TaskManager : MonoBehaviour
         _task.OnTaskCompleted -= FinishTask;
         _task.OnTruckNearToTrailer -= _camSwitcher.ActivateCustomCam;
         _task.OnTruckFarFromTrailer -= _camSwitcher.ReturnToDefaultCam;
+        _task.OnTryToFinishTask -= _trailerDetacher.MakeButtonActive;
+        _task.OnNoneTryToFinishTask -= _trailerDetacher.MakeButtonInActive;
 
-        var taskPrice = _task.GetTaskPrice();
-
-        _task.GetTrailer().DetachTrailer();
-        _taskFinalScreen.FillUI(taskPrice);
-        _taskFinalScreen.MakeFinalScreenActive();
-        _taskFinalScreen.SetCurrentTaskPrice(taskPrice);
         _taskList.RemoveCurrentTask(_task);
-        _taskTriggersActivator.EnableTriggers();
         _navigatorArrow.SetTarget(Vector3.zero);
         _gps.StopTargetFollow();
 

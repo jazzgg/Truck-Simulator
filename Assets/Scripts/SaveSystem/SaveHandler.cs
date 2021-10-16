@@ -20,11 +20,7 @@ public class SaveHandler : MonoBehaviour
     }
     public void Save()
     {
-       _saveSystem.Save(_player.GetData());
-    }
-    private void OnApplicationQuit()
-    {
-        Save();
+       _saveSystem.Save(_player._data);
     }
 
 }

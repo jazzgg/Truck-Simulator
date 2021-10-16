@@ -10,6 +10,8 @@ public class TrailerTask : MonoBehaviour
     public event Action OnTaskCompleted;
     public event Action OnTruckNearToTrailer;
     public event Action OnTruckFarFromTrailer;
+    public event Action OnTryToFinishTask;
+    public event Action OnNoneTryToFinishTask;
     public bool isDone { get; private set; }
     [HideInInspector]
     public bool isWorking = false;
@@ -41,23 +43,20 @@ public class TrailerTask : MonoBehaviour
     }
     public void Initialize() //called when task become active
     {
+        isWorking = true;
+
         _trailer.gameObject.SetActive(true);
 
         CurrentStage = TaskStage.TakeTrailer;
         SetStage();
     }
-    public bool TryToFinishTask() //Check distance btw trailer and finish point
+    public void TryToFinishTask() //Check distance btw trailer and finish point
     {
         if (Vector3.Distance(_trailer.transform.position, _finishPoint.position) < _minDistance)
         {
-            isWorking = false;
-            CurrentStage = TaskStage.IsDone;
-            SetStage();
-
-            return true;
+            OnTryToFinishTask?.Invoke();
         }
-
-        return false;
+        else OnNoneTryToFinishTask?.Invoke();
     }
     public void SetStage() //Set Stage and choose necessary settings
     {
@@ -72,12 +71,18 @@ public class TrailerTask : MonoBehaviour
                 OnStateChanged?.Invoke(_currentTarget);
                 break;
             case TaskStage.IsDone:
+                isWorking = false;
                 isDone = true;
                 OnTaskCompleted?.Invoke();
                 break;
         }
     }
+    public void FinishTask()
+    {
+        CurrentStage = TaskStage.IsDone;
 
+        SetStage();
+    }
     //Get Functions Region
     #region 
     public BoxCollider GetAttackPointCollider()
@@ -121,10 +126,9 @@ public class TrailerTask : MonoBehaviour
     }
     private void Update()
     {
-        if (isWorking && TryToFinishTask())
+        if (isWorking)
         {
-            CurrentStage = TaskStage.IsDone;
-            SetStage(); //use for update state
+            TryToFinishTask();
         }
         if (CurrentStage == TaskStage.TakeTrailer
             && Vector3.Distance(_trailer.transform.position, _player.position) < _minDistanceToTrailer)

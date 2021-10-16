@@ -13,6 +13,12 @@ public class TaskFinalScreen : MonoBehaviour
     private Player _player;
     [SerializeField]
     private Button _getButton;
+    [SerializeField]
+    private SaveHandler _saveHandler;
+    [SerializeField]
+    private TaskFinish _finish;
+    [SerializeField]
+    private TaskTriggersActivator _taskTriggersActivator;
 
     private int _scoreAmount;
 
@@ -24,10 +30,14 @@ public class TaskFinalScreen : MonoBehaviour
     {
         _finalScreen.SetActive(true);
         _getButton.interactable = true;
+
+        _finish.MakeButtonInActive();
+        _finish.isTrailerDetached = true;
     }
     public void MakeFinalScreenInActive()
     {
         _finalScreen.SetActive(false);
+        _taskTriggersActivator.EnableTriggers();
     }
     public void SetCurrentTaskPrice(int score) 
     {
@@ -38,6 +48,8 @@ public class TaskFinalScreen : MonoBehaviour
         _player._data.Score += _scoreAmount; 
 
         _getButton.interactable = false;
+
+        _saveHandler.Save();
     }
     private void Start()
     {

@@ -24,6 +24,7 @@ public class TaskTriggersActivator : MonoBehaviour
     public IEnumerator DisableTriggersWithDelay(float delay) // this one needed for disable with delay, if we just disable triggers the task window will stay at the screen
     {
         yield return new WaitForSeconds(delay);
+        DisableTriggers();
     }
 
 }
