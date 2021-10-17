@@ -7,7 +7,6 @@ public class TaskTrigger : MonoBehaviour
     [SerializeField]
     private GameObject _taskWindow;
 
-
     private void Start()
     {
         _taskWindow.SetActive(false);    

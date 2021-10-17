@@ -6,16 +6,20 @@ using System;
 
 public class TrailerTask : MonoBehaviour
 {
+    //events
+    #region
     public event Action<Vector3> OnStateChanged; //this one created for gps and navigator arrow
     public event Action OnTaskCompleted;
     public event Action OnTruckNearToTrailer;
     public event Action OnTruckFarFromTrailer;
     public event Action OnTryToFinishTask;
     public event Action OnNoneTryToFinishTask;
+    #endregion
     public bool isDone { get; private set; }
     [HideInInspector]
     public bool isWorking = false;
-
+    //serialize fields
+    #region
     [SerializeField]
     private Transform _player;
     [SerializeField]
@@ -30,6 +34,7 @@ public class TrailerTask : MonoBehaviour
     private float _minDistanceToTrailer;
     [SerializeField]
     private int _taskPrice;
+    #endregion
 
     private BoxCollider _attachPointCollider;
     private Vector3 _currentTarget;
@@ -41,8 +46,20 @@ public class TrailerTask : MonoBehaviour
         TakeOutTrailer,
         IsDone
     }
-    public void Initialize() //called when task become active
+    public void Initialize(TaskPoints points) //called when task become active
     {
+        _startPoint.position = points.GetRandomPoint().position;
+        _finishPoint.position = points.GetRandomPoint().position;
+
+        CheckPointsEqual(_startPoint, _finishPoint, points);
+
+        _trailer.transform.position = points.GetRandomPoint().position;
+
+        CheckPointsEqual(_trailer.transform, _startPoint, points);
+        CheckPointsEqual(_trailer.transform, _startPoint, points);
+
+        _taskPrice = Mathf.FloorToInt(points.GetDistance(_startPoint.position, _finishPoint.position));
+
         isWorking = true;
 
         _trailer.gameObject.SetActive(true);
@@ -136,6 +153,14 @@ public class TrailerTask : MonoBehaviour
             OnTruckNearToTrailer?.Invoke();
         }
         else if(CurrentStage == TaskStage.TakeTrailer) OnTruckFarFromTrailer?.Invoke();
+    }
+    private void CheckPointsEqual(Transform point1, Transform point2, TaskPoints points)
+    {
+        if (point1.position == point2.position)
+        {
+            point2.position = points.GetRandomPoint().position;
+            CheckPointsEqual(point1, point2, points);
+        }
     }
     private void OnDestroy()
     {

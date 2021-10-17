@@ -25,14 +25,14 @@ public class TaskManager : MonoBehaviour
     private CamerasSwitcher _camSwitcher;
     [SerializeField]
     private TaskFinish _trailerDetacher;
+    [SerializeField]
+    private TaskPoints _points;
 
     private TrailerTask _task;
 
     public void StartTask(TrailerTask task) // called by button and takes task logic connected with task button which was clicked
     {
         _navigatorArrow.gameObject.SetActive(true);
-
-        task.isWorking = true;
 
         task.OnTaskCompleted += FinishTask;
         task.OnStateChanged += _gps.SetNewTarget;
@@ -42,7 +42,7 @@ public class TaskManager : MonoBehaviour
         task.OnTryToFinishTask += _trailerDetacher.MakeButtonActive;
         task.OnNoneTryToFinishTask += _trailerDetacher.MakeButtonInActive;
          
-        task.Initialize();
+        task.Initialize(_points);
 
         _player.transform.position = task.GetStartPoint();
         _taskTriggersActivator.StartCoroutine(_taskTriggersActivator.DisableTriggersWithDelay(1));
