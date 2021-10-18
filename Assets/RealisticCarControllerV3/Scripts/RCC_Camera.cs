@@ -789,8 +789,8 @@ public class RCC_Camera : MonoBehaviour{
 		while (timer > 0f) {
 			
 			timer -= Time.deltaTime;
-			TPSDistance = Mathf.Lerp(TPSDistance, RCC_GetBounds.MaxBoundsExtent (playerCar.transform) * 2.55f, Time.deltaTime);
-			TPSHeight = Mathf.Lerp (TPSHeight, RCC_GetBounds.MaxBoundsExtent (playerCar.transform) * .75f, Time.deltaTime);
+			TPSDistance = Mathf.Lerp(TPSDistance, RCC_GetBounds.MaxBoundsExtent (playerCar.transform) * 2.55f, Time.deltaTime * 3);
+			TPSHeight = Mathf.Lerp (TPSHeight, RCC_GetBounds.MaxBoundsExtent (playerCar.transform) * .75f, Time.deltaTime * 3);
 			yield return null;
 
 		}
@@ -804,8 +804,8 @@ public class RCC_Camera : MonoBehaviour{
 		while (timer > 0f) {
 
 			timer -= Time.deltaTime;
-			TPSDistance = Mathf.Lerp(TPSDistance, RCC_GetBounds.MaxBoundsExtent (bounds) * 2.55f, Time.deltaTime);
-			TPSHeight = Mathf.Lerp(TPSHeight, RCC_GetBounds.MaxBoundsExtent (bounds) * .75f, Time.deltaTime);
+			TPSDistance = Mathf.Lerp(TPSDistance, RCC_GetBounds.MaxBoundsExtent (bounds) * 2.55f, Time.deltaTime * 3);
+			TPSHeight = Mathf.Lerp(TPSHeight, RCC_GetBounds.MaxBoundsExtent (bounds) * .75f, Time.deltaTime * 3);
 			yield return null;
 
 		}
@@ -819,8 +819,8 @@ public class RCC_Camera : MonoBehaviour{
 		while (timer > 0f) {
 
 			timer -= Time.deltaTime;
-			TPSDistance = Mathf.Lerp(TPSDistance, ((RCC_GetBounds.MaxBoundsExtent (bounds1) * 2.55f) + (RCC_GetBounds.MaxBoundsExtent (bounds2) * 2.75f)), Time.deltaTime);
-			TPSHeight = Mathf.Lerp(TPSHeight, ((RCC_GetBounds.MaxBoundsExtent (bounds1) * .75f) + (RCC_GetBounds.MaxBoundsExtent (bounds2) * .6f)), Time.deltaTime);
+			TPSDistance = Mathf.Lerp(TPSDistance, ((RCC_GetBounds.MaxBoundsExtent (bounds1) * 2.55f) + (RCC_GetBounds.MaxBoundsExtent (bounds2) * 2.75f)), Time.deltaTime * 3);
+			TPSHeight = Mathf.Lerp(TPSHeight, ((RCC_GetBounds.MaxBoundsExtent (bounds1) * .75f) + (RCC_GetBounds.MaxBoundsExtent (bounds2) * .6f)), Time.deltaTime * 3);
 			yield return null;
 
 		}
@@ -834,8 +834,8 @@ public class RCC_Camera : MonoBehaviour{
 		while (timer > 0f) {
 
 			timer -= Time.deltaTime;
-			TPSDistance = Mathf.Lerp(TPSDistance, ((RCC_GetBounds.MaxBoundsExtent (bounds1) * 2.75f) + (RCC_GetBounds.MaxBoundsExtent (bounds2) * 2.75f) + (RCC_GetBounds.MaxBoundsExtent (bounds3) * 2.75f)), Time.deltaTime);
-			TPSHeight = Mathf.Lerp(TPSHeight, ((RCC_GetBounds.MaxBoundsExtent (bounds1) * .6f) + (RCC_GetBounds.MaxBoundsExtent (bounds2) * .6f) + (RCC_GetBounds.MaxBoundsExtent (bounds3) * .6f)), Time.deltaTime);
+			TPSDistance = Mathf.Lerp(TPSDistance, ((RCC_GetBounds.MaxBoundsExtent (bounds1) * 2.75f) + (RCC_GetBounds.MaxBoundsExtent (bounds2) * 2.75f) + (RCC_GetBounds.MaxBoundsExtent (bounds3) * 2.75f)), Time.deltaTime * 3);
+			TPSHeight = Mathf.Lerp(TPSHeight, ((RCC_GetBounds.MaxBoundsExtent (bounds1) * .6f) + (RCC_GetBounds.MaxBoundsExtent (bounds2) * .6f) + (RCC_GetBounds.MaxBoundsExtent (bounds3) * .6f)), Time.deltaTime * 3);
 			yield return null;
 
 		}

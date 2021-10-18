@@ -5,18 +5,28 @@ using UnityEngine;
 public class TaskTrigger : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _taskWindow;
+    private GameObject[] _tasks;
 
     private void Start()
     {
-        _taskWindow.SetActive(false);    
+        foreach (var task in _tasks)
+        {
+            task.SetActive(false);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
-        _taskWindow.SetActive(true);
+        foreach (var task in _tasks)
+        {
+            task.SetActive(true);
+        }
+        
     }
     private void OnTriggerExit(Collider other)
     {
-        _taskWindow.SetActive(false);
+        foreach (var task in _tasks)
+        {
+            task.SetActive(false);
+        }
     }
 }

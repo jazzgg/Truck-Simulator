@@ -18,21 +18,20 @@ public class TrailerTask : MonoBehaviour
     public bool isDone { get; private set; }
     [HideInInspector]
     public bool isWorking = false;
-    //serialize fields
     #region
-    [SerializeField]
+
     private Transform _player;
-    [SerializeField]
+
     private RCC_TruckTrailer _trailer;
-    [SerializeField]
-    private Transform _finishPoint;
-    [SerializeField]
-    private Transform _startPoint;
-    [SerializeField]
-    private float _minDistance; // min distance to finish for win
-    [SerializeField]
-    private float _minDistanceToTrailer;
-    [SerializeField]
+
+    private Vector3 _finishPoint;
+
+    private Vector3 _startPoint;
+
+    private float _minDistance = 15f; // min distance to finish for win
+
+    private float _minDistanceToTrailer = 20f;
+
     private int _taskPrice;
     #endregion
 
@@ -40,36 +39,51 @@ public class TrailerTask : MonoBehaviour
     private Vector3 _currentTarget;
     private TaskStage CurrentStage;
 
+    public string _taskText;
+
+    public TrailerTask Constructor(Transform player, RCC_TruckTrailer trailer, TaskPoints points)
+    {
+        _player = player;
+        _trailer = trailer;
+
+        _startPoint = points.GetRandomPoint().position;
+        _finishPoint = points.GetRandomPoint().position;
+
+        CheckPointsEqual(_startPoint, _finishPoint, points);
+
+        _trailer.transform.position = points.GetRandomPoint().position;
+
+        CheckPointsEqual(_trailer.transform.position, _startPoint, points);
+        CheckPointsEqual(_trailer.transform.position, _startPoint, points);
+
+        var firstPartOfTaskPrice = Mathf.FloorToInt(points.GetDistance(_startPoint, _trailer.transform.position));
+        var secondPartOfTaskPrice = Mathf.FloorToInt(points.GetDistance(_trailer.transform.position, _finishPoint));
+
+        _taskPrice = firstPartOfTaskPrice + secondPartOfTaskPrice;
+
+        _taskText = $"Заберите прицеп довезите его до точки {UnityEngine.Random.Range(0, 10)}  + {_taskPrice}";
+
+        return this;
+
+    }
     public enum TaskStage
     {
         TakeTrailer,
         TakeOutTrailer,
         IsDone
     }
-    public void Initialize(TaskPoints points) //called when task become active
+    public void Initialize() //called when task become active
     {
-        _startPoint.position = points.GetRandomPoint().position;
-        _finishPoint.position = points.GetRandomPoint().position;
-
-        CheckPointsEqual(_startPoint, _finishPoint, points);
-
-        _trailer.transform.position = points.GetRandomPoint().position;
-
-        CheckPointsEqual(_trailer.transform, _startPoint, points);
-        CheckPointsEqual(_trailer.transform, _startPoint, points);
-
-        _taskPrice = Mathf.FloorToInt(points.GetDistance(_startPoint.position, _finishPoint.position));
-
-        isWorking = true;
-
         _trailer.gameObject.SetActive(true);
 
         CurrentStage = TaskStage.TakeTrailer;
         SetStage();
+
+        isWorking = true;
     }
     public void TryToFinishTask() //Check distance btw trailer and finish point
     {
-        if (Vector3.Distance(_trailer.transform.position, _finishPoint.position) < _minDistance)
+        if (Vector3.Distance(_trailer.transform.position, _finishPoint) < _minDistance)
         {
             OnTryToFinishTask?.Invoke();
         }
@@ -84,7 +98,7 @@ public class TrailerTask : MonoBehaviour
                 OnStateChanged?.Invoke(_currentTarget);
                 break;
             case TaskStage.TakeOutTrailer:
-                _currentTarget = _finishPoint.position;
+                _currentTarget = _finishPoint;
                 OnStateChanged?.Invoke(_currentTarget);
                 break;
             case TaskStage.IsDone:
@@ -112,7 +126,7 @@ public class TrailerTask : MonoBehaviour
     }
     public Vector3 GetFinishPoint()
     {
-        return _finishPoint.position;
+        return _finishPoint;
     }
     public Vector3 GetCurrentTarget()
     {
@@ -120,7 +134,7 @@ public class TrailerTask : MonoBehaviour
     }
     public Vector3 GetStartPoint()
     {
-        return _startPoint.position;
+        return _startPoint;
     }
     public int GetTaskPrice()
     {
@@ -137,7 +151,6 @@ public class TrailerTask : MonoBehaviour
     private void Start()
     {
         _trailer.OnTrailerAttached += OnTrailerAttachedChangeStage;
-        _trailer.gameObject.SetActive(false);
 
         _attachPointCollider = _trailer.GetComponentInChildren<RCC_TrailerAttachPoint>().GetComponent<BoxCollider>();
     }
@@ -154,11 +167,11 @@ public class TrailerTask : MonoBehaviour
         }
         else if(CurrentStage == TaskStage.TakeTrailer) OnTruckFarFromTrailer?.Invoke();
     }
-    private void CheckPointsEqual(Transform point1, Transform point2, TaskPoints points)
+    private void CheckPointsEqual(Vector3 point1, Vector3 point2, TaskPoints points)
     {
-        if (point1.position == point2.position)
+        if (point1 == point2)
         {
-            point2.position = points.GetRandomPoint().position;
+            point2 = points.GetRandomPoint().position;
             CheckPointsEqual(point1, point2, points);
         }
     }

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eea0025704b89ee4990cb332c3a9f23d, type: 3}
   m_Name: LevelMapSettings
   m_EditorClassIdentifier: 
-  baseOffset: {x: -742.8, y: -555.1}
-  realMapScale: {x: 1242.9, y: 1037}
-  mapSprite: {fileID: 21300000, guid: d476c9dd057d17041ae63885363faf9b, type: 3}
+  baseOffset: {x: -764.9, y: -572}
+  realMapScale: {x: 1321.6, y: 1341.2}
+  mapSprite: {fileID: 21300000, guid: 2193fc7a7092ca54e831890658da752c, type: 3}

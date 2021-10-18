@@ -7,23 +7,66 @@ using System;
 
 public class TaskList : MonoBehaviour 
 {
+    public event Action OnClickTaskButton;
+
     [SerializeField]
+    private Text[] _prices;
+    [SerializeField]
+    private Button[] _buttons;
+    [SerializeField]
+    private TaskManager _taskManager;
+
     private List<TrailerTask> _tasks;
-    [SerializeField]
-    private List<Button> _tasksVis;
 
-    public void RemoveCurrentTask(TrailerTask trailerTask)
+    private Transform _player;
+    private RCC_TruckTrailer _trailer;
+    private TaskPoints _points;
+
+    private KeyValuePair<int, TrailerTask> _currentTask;
+
+
+
+    public TrailerTask GenerateNewTask(int index)
     {
-        int index = _tasks.IndexOf(trailerTask);
+        var newTask = gameObject.AddComponent<TrailerTask>().Constructor(_player, _trailer, _points);
+        
+        _buttons[index].onClick.AddListener( () => _currentTask = new KeyValuePair<int, TrailerTask>(index, newTask));
+        _buttons[index].onClick.AddListener( () => _taskManager.StartTask(_currentTask.Value));
 
-        VisualizeRemovedTask(index);
+        _prices[index].text = newTask._taskText;
 
-        _tasksVis.RemoveAt(index);
+        return newTask;
+    }
+    public void GenerateNewTaskInsteadCurrent()
+    {
+        var newTask = gameObject.AddComponent<TrailerTask>().Constructor(_player, _trailer, _points);
+
+        var index = _currentTask.Key;
+
         _tasks.RemoveAt(index);
+        _tasks.Add(newTask);
+
+        _prices[index].text = newTask._taskText;
+
+        _buttons[index].onClick.AddListener( () => _currentTask = new KeyValuePair<int, TrailerTask>(index, newTask));
+        _buttons[index].onClick.AddListener( () => _taskManager.StartTask(_currentTask.Value));
     }
-    private void VisualizeRemovedTask(int index)
+    public void GenerateStartTasks()
     {
-        _tasksVis[index].interactable = false;
+        _tasks = new List<TrailerTask>(_buttons.Length);
+
+        for (int i = 0; i < _buttons.Length; i++)
+        {
+            _tasks.Add(GenerateNewTask(i));
+        }
+
     }
+    public void InitializeFieldsForGenerate(Transform player, RCC_TruckTrailer trailer, TaskPoints points)
+    {
+        _player = player;
+        _trailer = trailer;
+        _points = points;
+    }
+
 }
  

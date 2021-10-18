@@ -14,6 +14,8 @@ public class TaskManager : MonoBehaviour
     [SerializeField]
     private Player _player;
     [SerializeField]
+    private RCC_TruckTrailer _trailer;
+    [SerializeField]
     private TaskFinalScreen _taskFinalScreen;
     [SerializeField]
     private TaskList _taskList;
@@ -24,7 +26,7 @@ public class TaskManager : MonoBehaviour
     [SerializeField]
     private CamerasSwitcher _camSwitcher;
     [SerializeField]
-    private TaskFinish _trailerDetacher;
+    private TaskFinish _taskFinish;
     [SerializeField]
     private TaskPoints _points;
 
@@ -39,14 +41,14 @@ public class TaskManager : MonoBehaviour
         task.OnStateChanged += _navigatorArrow.SetTarget;
         task.OnTruckNearToTrailer += _camSwitcher.ActivateCustomCam;
         task.OnTruckFarFromTrailer += _camSwitcher.ReturnToDefaultCam;
-        task.OnTryToFinishTask += _trailerDetacher.MakeButtonActive;
-        task.OnNoneTryToFinishTask += _trailerDetacher.MakeButtonInActive;
+        task.OnTryToFinishTask += _taskFinish.MakeButtonActive;
+        task.OnNoneTryToFinishTask += _taskFinish.MakeButtonInActive;
          
-        task.Initialize(_points);
+        task.Initialize();
 
         _player.transform.position = task.GetStartPoint();
         _taskTriggersActivator.StartCoroutine(_taskTriggersActivator.DisableTriggersWithDelay(1));
-        _trailerDetacher.SetCurrentTask(task);
+        _taskFinish.SetCurrentTask(task);
         _taskFinalScreen.SetCurrentTaskPrice(task.GetTaskPrice());
         _taskFinalScreen.FillUI(task.GetTaskPrice());
 
@@ -61,13 +63,20 @@ public class TaskManager : MonoBehaviour
         _task.OnTaskCompleted -= FinishTask;
         _task.OnTruckNearToTrailer -= _camSwitcher.ActivateCustomCam;
         _task.OnTruckFarFromTrailer -= _camSwitcher.ReturnToDefaultCam;
-        _task.OnTryToFinishTask -= _trailerDetacher.MakeButtonActive;
-        _task.OnNoneTryToFinishTask -= _trailerDetacher.MakeButtonInActive;
+        _task.OnTryToFinishTask -= _taskFinish.MakeButtonActive;
+        _task.OnNoneTryToFinishTask -= _taskFinish.MakeButtonInActive;
 
-        _taskList.RemoveCurrentTask(_task);
+        _taskList.GenerateNewTaskInsteadCurrent();
         _navigatorArrow.SetTarget(Vector3.zero);
         _gps.StopTargetFollow();
 
+    }
+
+    private void Start()
+    {
+        _taskList.InitializeFieldsForGenerate(_player.transform, _trailer, _points);
+
+        _taskList.GenerateStartTasks();
     }
 
 }

@@ -28,11 +28,12 @@ public class TaskFinalScreen : MonoBehaviour
     }
     public void MakeFinalScreenActive()
     {
+        _finish.isTrailerDetached = true;
+
         _finalScreen.SetActive(true);
         _getButton.interactable = true;
 
         _finish.MakeButtonInActive();
-        _finish.isTrailerDetached = true;
     }
     public void MakeFinalScreenInActive()
     {

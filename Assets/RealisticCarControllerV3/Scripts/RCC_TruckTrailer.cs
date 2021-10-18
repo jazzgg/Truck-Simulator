@@ -219,7 +219,7 @@ public class RCC_TruckTrailer : MonoBehaviour {
 		if (RCC_SceneManager.Instance.activePlayerCamera && RCC_SceneManager.Instance.activePlayerCamera.TPSAutoFocus)
 			StartCoroutine(RCC_SceneManager.Instance.activePlayerCamera.AutoFocus ());
 
-		Invoke("MakeInActive", 5f);
+		Invoke("MakeInActive", 3);
 
 	}
 	private void MakeInActive()
